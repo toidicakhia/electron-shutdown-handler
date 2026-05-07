@@ -70,24 +70,15 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Configure prebuild upload token
-        shell: pwsh
-        run: |
-          "upload=$env:PREBUILD_GH_TOKEN" | Out-File -FilePath "$env:USERPROFILE\\.prebuildrc" -Encoding ascii
-        env:
-          PREBUILD_GH_TOKEN: ${{ secrets.PREBUILD_GH_TOKEN }}
-
       - name: Build and upload prebuild (x64)
         run: npm run prebuild -- --arch x64
+        env:
+          PREBUILD_UPLOAD: ${{ secrets.PREBUILD_GH_TOKEN }}
 
       - name: Build and upload prebuild (ia32)
         run: npm run prebuild -- --arch ia32
-
-      - name: Cleanup prebuild upload token
-        if: always()
-        shell: pwsh
-        run: |
-          Remove-Item -Path "$env:USERPROFILE\\.prebuildrc" -ErrorAction SilentlyContinue
+        env:
+          PREBUILD_UPLOAD: ${{ secrets.PREBUILD_GH_TOKEN }}
 
   publish:
     name: Publish package and release
@@ -98,6 +89,7 @@ jobs:
       - build-addon-windows
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: Checkout
@@ -109,7 +101,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org
+          registry-url: https://npm.pkg.github.com
+          scope: '@paymoapp'
           cache: npm
 
       - name: Install dependencies
@@ -118,10 +111,10 @@ jobs:
       - name: Build TypeScript
         run: npm run build:ts
 
-      - name: Publish to npm
-        run: npm publish --access public
+      - name: Publish to GitHub Registry
+        run: npm publish --registry https://npm.pkg.github.com
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare release notes
         run: |
