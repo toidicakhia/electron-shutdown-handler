@@ -8,5 +8,9 @@ if (process.platform == 'win32') {
 		shell: true
 	});
 
+	if (status.status !== 0) {
+		console.error('Failed to install native addon with MSVS 2022/2019.');
+	}
+
 	process.exit(status.status || 0);
 }
