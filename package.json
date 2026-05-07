@@ -12,6 +12,7 @@
     "build": "npm run clean && npm run build:ts && npm run build:gyp",
     "build:ts": "tsc",
     "build:gyp": "node-gyp rebuild",
+    "prepack": "npm run build:ts",
     "prebuild": "prebuild --all -r napi --strip",
     "typecheck": "tsc --noEmit",
     "lint": "esw --color --ext .ts src",
