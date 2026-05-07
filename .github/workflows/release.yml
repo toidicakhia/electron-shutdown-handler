@@ -70,15 +70,24 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Build and upload prebuild (x64)
-        run: npm run prebuild -- --arch x64 --upload "$PREBUILD_GH_TOKEN"
+      - name: Configure prebuild upload token
+        shell: pwsh
+        run: |
+          "upload=$env:PREBUILD_GH_TOKEN" | Out-File -FilePath "$env:USERPROFILE\\.prebuildrc" -Encoding ascii
         env:
           PREBUILD_GH_TOKEN: ${{ secrets.PREBUILD_GH_TOKEN }}
 
+      - name: Build and upload prebuild (x64)
+        run: npm run prebuild -- --arch x64
+
       - name: Build and upload prebuild (ia32)
-        run: npm run prebuild -- --arch ia32 --upload "$PREBUILD_GH_TOKEN"
-        env:
-          PREBUILD_GH_TOKEN: ${{ secrets.PREBUILD_GH_TOKEN }}
+        run: npm run prebuild -- --arch ia32
+
+      - name: Cleanup prebuild upload token
+        if: always()
+        shell: pwsh
+        run: |
+          Remove-Item -Path "$env:USERPROFILE\\.prebuildrc" -ErrorAction SilentlyContinue
 
   publish:
     name: Publish package and release
