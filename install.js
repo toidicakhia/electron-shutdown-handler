@@ -14,7 +14,7 @@ shell: true
 return result.status || 0;
 }
 
-if (process.platform == 'win32') {
+if (process.platform === 'win32') {
 const prebuildStatus = runCommand('prebuild-install', ['-r', 'napi'], 'Trying to install prebuilt addon');
 if (prebuildStatus === 0) {
 process.exit(0);
