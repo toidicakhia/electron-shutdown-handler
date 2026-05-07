@@ -11,7 +11,7 @@
     "clean": "node-gyp clean && rimraf dist",
     "build": "npm run clean && npm run build:ts && npm run build:gyp",
     "build:ts": "tsc",
-    "build:gyp": "node-gyp rebuild --msvs_version=2022 || node-gyp rebuild --msvs_version=2019",
+    "build:gyp": "node-gyp rebuild",
     "prebuild": "prebuild --all -r napi --strip",
     "typecheck": "tsc --noEmit",
     "lint": "esw --color --ext .ts src",
