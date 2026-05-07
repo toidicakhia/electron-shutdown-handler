@@ -40,6 +40,8 @@ The project uses Node-API version 6, you can check [this table](https://nodejs.o
 
 If there's a compliant prebuilt binary, it will be downloaded during installation, or it will be built. You can also rebuild it anytime by running `npm run build:gyp`.
 
+When a local Windows build is needed, the install/build flow targets MSVS 2022 first and falls back to MSVS 2019 automatically via `node-gyp --msvs_version`.
+
 The library has native addons for Windows only, but it won't fail during install or during runtime on other platforms.
 
 #### Example
