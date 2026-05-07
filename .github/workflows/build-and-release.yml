@@ -73,10 +73,14 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Build and upload prebuild (x64)
-        run: npm run prebuild -- --arch x64 --upload ${{ secrets.PREBUILD_GH_TOKEN }}
+        run: npm run prebuild -- --arch x64 --upload "$PREBUILD_GH_TOKEN"
+        env:
+          PREBUILD_GH_TOKEN: ${{ secrets.PREBUILD_GH_TOKEN }}
 
       - name: Build and upload prebuild (ia32)
-        run: npm run prebuild -- --arch ia32 --upload ${{ secrets.PREBUILD_GH_TOKEN }}
+        run: npm run prebuild -- --arch ia32 --upload "$PREBUILD_GH_TOKEN"
+        env:
+          PREBUILD_GH_TOKEN: ${{ secrets.PREBUILD_GH_TOKEN }}
 
   publish:
     name: Publish package and release
