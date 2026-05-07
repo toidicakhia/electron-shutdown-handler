@@ -9,7 +9,7 @@ if (process.platform == 'win32') {
 	});
 
 	if (status.status !== 0) {
-		console.error('Failed to install native addon with MSVS 2022/2019.');
+		console.error('Failed to install native addon using MSVS 2022/2019. Ensure Visual Studio Build Tools with Desktop development for C++ are installed.');
 	}
 
 	process.exit(status.status || 0);
